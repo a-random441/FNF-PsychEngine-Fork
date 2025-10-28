@@ -55,6 +55,11 @@ class ShaderFunctions
 				LuaUtils.cameraFromString(camera).setFilters([new ShaderFilter(shader)]);
 				return true;
 			}
+			if(obj == null && camera == null)
+			{
+				LuaUtils.cameraFromString(camera).setFilters([]);
+				return true;									
+			}
 			FunkinLua.luaTrace('setCameraFilter: Could not find sprite or shader "' + obj + '"!', false, false, FlxColor.RED);
 			return false;
 			#else
