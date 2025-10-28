@@ -241,6 +241,24 @@ class ReflectionFunctions
 			else FunkinLua.luaTrace('createInstance: Variable $variableToSave is already being used and cannot be replaced!', false, false, FlxColor.RED);
 			return false;
 		});
+		Lua_helper.add_callback(lua, "addInstance", function(objectName:String, ?inFront:Bool = false) {
+			FunkinLua.luaTrace("addInstance is deprecated! Use addLuaSprite instead", false, true);
+			var savedObj:Dynamic = MusicBeatState.getVariables().get(objectName);
+			if(savedObj != null)
+			{
+				var obj:Dynamic = savedObj;
+				if (inFront)
+					LuaUtils.getTargetInstance().add(obj);
+				else
+				{
+					if(!PlayState.instance.isDead)
+						PlayState.instance.insert(PlayState.instance.members.indexOf(LuaUtils.getLowestCharacterGroup()), obj);
+					else
+						GameOverSubstate.instance.insert(GameOverSubstate.instance.members.indexOf(GameOverSubstate.instance.boyfriend), obj);
+				}
+			}
+			else FunkinLua.luaTrace('addInstance: Can\'t add what doesn\'t exist~ ($objectName)', false, false, FlxColor.RED);
+		});
 		Lua_helper.add_callback(lua, "instanceArg", function(instanceName:String, ?className:String = null) {
 			var retStr:String ='$instanceStr::$instanceName';
 			if(className != null) retStr += '::$className';
