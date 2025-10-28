@@ -55,7 +55,7 @@ class ShaderFunctions
 				LuaUtils.cameraFromString(camera).setFilters([new ShaderFilter(shader)]);
 				return true;
 			}
-			if(obj == null && camera == null)
+			if(camera == '')
 			{
 				LuaUtils.cameraFromString(camera).setFilters([]);
 				return true;									
