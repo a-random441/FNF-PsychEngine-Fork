@@ -4,9 +4,14 @@ import flixel.FlxBasic;
 import objects.Character;
 import psychlua.LuaUtils;
 import psychlua.CustomSubstate;
+import psychlua.FunkinLua
 
 #if LUA_ALLOWED
 import psychlua.FunkinLua;
+import llua.Lua;
+import llua.LuaL;
+import llua.State;
+import llua.Convert;
 #end
 
 #if HSCRIPT_ALLOWED
@@ -370,14 +375,23 @@ class HScript extends Iris
 			return null;
             */
 
+			var retVal:Dynamic = null;
+
+			#if hscript
 			initHaxeModuleCode(funk, codeToRun, varsToBring);
-			if (funk.hscript != null)
-			{
-				final retVal:IrisCall = funk.hscript.call(funcToRun, funcArgs);
-				if(retVal != null && !isOfTypes(retVal, [Bool, Int, Float, String, Array])) retVal = null;
-				if(retVal == null) Lua.pushnil(lua);
-				return retVal;
+			try {
+				retVal = funk.hscript.execute(funcToRun, funcArgs);
 			}
+			catch (e:Dynamic) {
+				luaTrace(scriptName + ":" + lastCalledFunction + " - " + e, false, false, FlxColor.RED);
+			}
+			#else
+			luaTrace("runHaxeCode: HScript isn't supported on this platform!", false, false, FlxColor.RED);
+			#end
+
+			if(retVal != null && !isOfTypes(retVal, [Bool, Int, Float, String, Array])) retVal = null;
+			if(retVal == null) Lua.pushnil(lua);
+			return retVal;
 		});
 		
 		funk.addLocalCallback("runHaxeFunction", function(funcToRun:String, ?funcArgs:Array<Dynamic> = null) {
