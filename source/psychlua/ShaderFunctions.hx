@@ -43,16 +43,29 @@ funk.addLocalCallback("setCameraShader", function(shaderName:String, camera:Stri
 
 	var split:Array<String> = shaderName.split('.');
 	var leObj:FlxSprite = LuaUtils.getObjectDirectly(split[0]);
+	 var sprite:FlxSprite = PlayState.instance.getLuaObject(objName);
+    
+    if(sprite != null) {
+        // If it has a shader attached, apply to camera
+        if(sprite.shader != null) {
+            LuaUtils.cameraFromString(camera).setFilters([new ShaderFilter(sprite.shader)]);
+            return true;
+        }
+        
+        // Otherwise, just move the sprite to the requested camera
+        sprite.cameras = [LuaUtils.cameraFromString(camera)];
+        return true;
+    }
 	if(split.length > 1)
 	{
 		leObj = LuaUtils.getVarInArray(LuaUtils.getPropertyLoop(split), split[split.length - 1]);
 	}
 
-	if(leObj != null)
-	{
-		leObj.cameras = [LuaUtils.cameraFromString(camera)];
-		return true;
-	}
+	//var shader:FlxRuntimeShader = getShader(objName);
+    if(shader != null) {
+        LuaUtils.cameraFromString(camera).setFilters([new ShaderFilter(shader.shader)]); // wrap shader properly
+        return true;
+    }
 
 	return false;
 	#else
