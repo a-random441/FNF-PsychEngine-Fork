@@ -28,7 +28,7 @@ class ShaderFunctions
 		// NEWLY ADDED CUSTOM LUA FUNCTION
 funk.addLocalCallback("setCameraShader", function(objName:String, camera:String = "game") {
     #if (!flash && MODS_ALLOWED && sys)
-    
+
     // 1️⃣ Top-level Lua sprite
     var sprite:FlxSprite = PlayState.instance.getLuaObject(objName);
     if(sprite != null) {
@@ -39,7 +39,7 @@ funk.addLocalCallback("setCameraShader", function(objName:String, camera:String 
         }
         return true;
     }
-    
+
     // 2️⃣ Nested object (leObj)
     var split:Array<String> = objName.split('.');
     var leObj:FlxSprite = LuaUtils.getObjectDirectly(split[0]);
@@ -50,16 +50,16 @@ funk.addLocalCallback("setCameraShader", function(objName:String, camera:String 
         leObj.cameras = [LuaUtils.cameraFromString(camera)];
         return true;
     }
-    
+
     // 3️⃣ Direct shader fallback
     if(!funk.runtimeShaders.exists(objName) && !funk.initLuaShader(objName)) {
         FunkinLua.luaTrace('setCameraShader: Shader "' + objName + '" is missing!', false, false, FlxColor.RED);
         return false;
     }
-    
+
     var shader:FlxRuntimeShader = getShader(objName);
-    if(shader != null && shader.shader != null) {
-        LuaUtils.cameraFromString(camera).setFilters([new ShaderFilter(shader.shader)]);
+    if(shader != null) {
+        LuaUtils.cameraFromString(camera).setFilters([new ShaderFilter(shader)]);
         return true;
     }
 
@@ -71,6 +71,7 @@ funk.addLocalCallback("setCameraShader", function(objName:String, camera:String 
     return false;
     #end
 });
+
 
 
 		
