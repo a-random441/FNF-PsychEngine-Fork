@@ -26,53 +26,52 @@ class ShaderFunctions
 		});
 
 		// NEWLY ADDED CUSTOM LUA FUNCTION
-funk.addLocalCallback("setCameraShader", function(shaderName:String, camera:String = 'game') {
-	#if (!flash && MODS_ALLOWED && sys)
-	if(!funk.runtimeShaders.exists(shaderName) && !funk.initLuaShader(shaderName))
-	{
-		FunkinLua.luaTrace('setCameraShader: Shader "' + shaderName + '" is missing!', false, false, FlxColor.RED);
-		return false;
-	}
-	
-	var shader:FlxBasic = PlayState.instance.getLuaObject(shaderName); // this assumes you are making a lua sprite shader to put on the cameras
-	if(shader != null)
-	{
-		LuaUtils.cameraFromString(camera).setFilters([new ShaderFilter(shader)]);
-		return true;
-	}
-
-	var split:Array<String> = shaderName.split('.');
-	var leObj:FlxSprite = LuaUtils.getObjectDirectly(split[0]);
-	 var sprite:FlxSprite = PlayState.instance.getLuaObject(objName);
+funk.addLocalCallback("setCameraShader", function(objName:String, camera:String = "game") {
+    #if (!flash && MODS_ALLOWED && sys)
     
+    // 1️⃣ Top-level Lua sprite
+    var sprite:FlxSprite = PlayState.instance.getLuaObject(objName);
     if(sprite != null) {
-        // If it has a shader attached, apply to camera
         if(sprite.shader != null) {
             LuaUtils.cameraFromString(camera).setFilters([new ShaderFilter(sprite.shader)]);
-            return true;
+        } else {
+            sprite.cameras = [LuaUtils.cameraFromString(camera)];
         }
-        
-        // Otherwise, just move the sprite to the requested camera
-        sprite.cameras = [LuaUtils.cameraFromString(camera)];
         return true;
     }
-	if(split.length > 1)
-	{
-		leObj = LuaUtils.getVarInArray(LuaUtils.getPropertyLoop(split), split[split.length - 1]);
-	}
-
-	//var shader:FlxRuntimeShader = getShader(objName);
-    if(shader != null) {
-        LuaUtils.cameraFromString(camera).setFilters([new ShaderFilter(shader.shader)]); // wrap shader properly
+    
+    // 2️⃣ Nested object (leObj)
+    var split:Array<String> = objName.split('.');
+    var leObj:FlxSprite = LuaUtils.getObjectDirectly(split[0]);
+    if(split.length > 1) {
+        leObj = LuaUtils.getVarInArray(LuaUtils.getPropertyLoop(split), split[split.length - 1]);
+    }
+    if(leObj != null) {
+        leObj.cameras = [LuaUtils.cameraFromString(camera)];
+        return true;
+    }
+    
+    // 3️⃣ Direct shader fallback
+    if(!funk.runtimeShaders.exists(objName) && !funk.initLuaShader(objName)) {
+        FunkinLua.luaTrace('setCameraShader: Shader "' + objName + '" is missing!', false, false, FlxColor.RED);
+        return false;
+    }
+    
+    var shader:FlxRuntimeShader = getShader(objName);
+    if(shader != null && shader.shader != null) {
+        LuaUtils.cameraFromString(camera).setFilters([new ShaderFilter(shader.shader)]);
         return true;
     }
 
-	return false;
-	#else
-	FunkinLua.luaTrace("setCameraShader: Platform unsupported for Runtime Shaders!", false, false, FlxColor.RED);
-	return false;
-	#end
+    FunkinLua.luaTrace('setCameraShader: Could not find sprite or shader "' + objName + '"!', false, false, FlxColor.RED);
+    return false;
+
+    #else
+    FunkinLua.luaTrace("setCameraShader: Platform unsupported for Runtime Shaders!", false, false, FlxColor.RED);
+    return false;
+    #end
 });
+
 
 		
 		funk.addLocalCallback("setSpriteShader", function(obj:String, shader:String) {
