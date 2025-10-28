@@ -149,6 +149,20 @@ class MainMenuState extends MusicBeatState
 		if (FlxG.sound.music.volume < 0.8)
 			FlxG.sound.music.volume = Math.min(FlxG.sound.music.volume + 0.5 * elapsed, 0.8);
 
+		var mouseX = FlxG.mouse.x;
+		var mouseY = FlxG.mouse.y;
+
+		var screenCenterX = FlxG.width / 2;
+		var screenCenterY = FlxG.height / 2;
+		
+		var offsetStrength:Float = 0.15;
+
+		var offsetX = (mouseX - screenCenterX) * offsetStrength;
+		var offsetY = (mouseY - screenCenterY) * offsetStrength;
+
+		camFollow.x = FlxMath.lerp(camFollow.x, offsetX, 0.1);
+		camFollow.y = FlxMath.lerp(camFollow.y, offsetY, 0.1);
+
 		if (!selectedSomethin)
 		{
 			if (controls.UI_UP_P)
@@ -375,6 +389,6 @@ class MainMenuState extends MusicBeatState
 		}
 		selectedItem.animation.play('selected');
 		selectedItem.centerOffsets();
-		camFollow.y = selectedItem.getGraphicMidpoint().y;
+		// camFollow.y = selectedItem.getGraphicMidpoint().y;
 	}
 }
