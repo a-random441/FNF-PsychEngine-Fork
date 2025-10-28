@@ -377,8 +377,9 @@ class HScript extends Iris
 
 			var retVal:Dynamic = null;
 
-			#if hscript
-			initHaxeModuleCode(funk, codeToRun, varsToBring);
+			if (funk.hscript != null)
+			{
+				initHaxeModuleCode(funk, codeToRun, varsToBring);
 			try {
 				retVal = funk.hscript.execute(funcToRun, funcArgs);
 			}
@@ -392,6 +393,7 @@ class HScript extends Iris
 			if(retVal != null && !isOfTypes(retVal, [Bool, Int, Float, String, Array])) retVal = null;
 			if(retVal == null) Lua.pushnil(lua);
 			return retVal;
+			}
 		});
 		
 		funk.addLocalCallback("runHaxeFunction", function(funcToRun:String, ?funcArgs:Array<Dynamic> = null) {
