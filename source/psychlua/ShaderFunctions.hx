@@ -25,15 +25,15 @@ class ShaderFunctions
             if (possible != null && Std.isOfType(possible, FlxCamera))
                 camera = cast possible;
     }
-			
+	var shaderPath = Paths.shader(shader);
 	if (shader == null)
 	{
 		FunkinLua.luaTrace("setCameraFilter: Object $shader is missing!", false, false, FlxColor.RED);
 		return false;
 	}	
     // Load the shader from cache or create it
-    var shad = new CustomShader(shader);
-    camera.setFilters([new ShaderFilter(shad.shader)]);
+     var shaderObj = new FlxRuntimeShader(shaderPath);
+    camera.setFilters([new ShaderFilter(shaderObj)]);
 		});
 		
 		funk.addLocalCallback("initLuaShader", function(name:String) {
