@@ -11,46 +11,7 @@ class ShaderFunctions
 	{
 		var lua = funk.lua;
 		// shader shit
-		funk.addLocalCallback("setCameraShader", function(tag:String, cam:String, shader:String) {
-    if (!ClientPrefs.data.shaders) return false;
-    #if (!flash && MODS_ALLOWED && sys)
-    // Initialize shader if not exists
-    if (!funk.runtimeShaders.exists(shader) && !funk.initLuaShader(shader)) {
-        FunkinLua.luaTrace('setCameraShader: Shader ' + shader + ' is missing!', false, false, FlxColor.RED);
-        return false;
-    }
-
-    var camera:FlxCamera = null;
-    switch (cam.toLowerCase()) {
-        case 'camgame':  camera = PlayState.instance.camGame;
-        case 'camhud':   camera = PlayState.instance.camHUD;
-        case 'camother': camera = PlayState.instance.camOther;
-        default:
-            // optionally try reflect / dynamic property
-    }
-
-    if (camera == null) {
-        FunkinLua.luaTrace('setCameraShader: Camera not found: ' + cam, false, false, FlxColor.RED);
-        return false;
-    }
-
-    // apply shader
-    var arr:Array<Dynamic> = funk.runtimeShaders.get(shader);
-    // arr[0] / arr[1] are used in sprite code: the compiled shader and uniform data
-    var runtime:FlxRuntimeShader = arr[0];
-    var shaderData = arr[1];
-    camera.setFilters([ new ShaderFilter(runtime) ]);
-
-    // store mapping tag → (camera, shader name)
-    // you could keep a Map inside FunkinLua or static Map in ShaderFunctions
-    getCameraShaderMap().set(tag, { camera: camera, runtime: runtime });
-
-    return true;
-    #else
-    FunkinLua.luaTrace("setCameraShader: Platform unsupported for Runtime Shaders!", false, false, FlxColor.RED);
-    return false;
-    #end
-});	
+		
 		funk.addLocalCallback("initLuaShader", function(name:String) {
 			if(!ClientPrefs.data.shaders) return false;
 
@@ -61,6 +22,43 @@ class ShaderFunctions
 			#end
 			return false;
 		});
+
+		// NEWLY ADDED CUSTOM LUA FUNCTION
+funk.addLocalCallback("setCameraShader", function(shaderName:String, camera:String = 'game') {
+	#if (!flash && MODS_ALLOWED && sys)
+	if(!funk.runtimeShaders.exists(shaderName) && !funk.initLuaShader(shaderName))
+	{
+		FunkinLua.luaTrace('setCameraShader: Shader "' + shaderName + '" is missing!', false, false, FlxColor.RED);
+		return false;
+	}
+	
+	var shader:FlxRuntimeShader = funk.runtimeShaders.get(shaderName);
+	if(shader != null)
+	{
+		shader.cameras = [LuaUtils.cameraFromString(camera)];
+		return true;
+	}
+
+	var split:Array<String> = shaderName.split('.');
+	var leObj:FlxSprite = LuaUtils.getObjectDirectly(split[0]);
+	if(split.length > 1)
+	{
+		leObj = LuaUtils.getVarInArray(LuaUtils.getPropertyLoop(split), split[split.length - 1]);
+	}
+
+	if(leObj != null)
+	{
+		leObj.cameras = [LuaUtils.cameraFromString(camera)];
+		return true;
+	}
+
+	return false;
+	#else
+	FunkinLua.luaTrace("setCameraShader: Platform unsupported for Runtime Shaders!", false, false, FlxColor.RED);
+	return false;
+	#end
+});
+
 		
 		funk.addLocalCallback("setSpriteShader", function(obj:String, shader:String) {
 			if(!ClientPrefs.data.shaders) return false;
