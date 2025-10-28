@@ -62,6 +62,7 @@ import flixel.tweens.FlxTween;
 import flixel.group.FlxSpriteGroup;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.addons.transition.FlxTransitionableState;
+import flixel.addons.effect.FlxSkewedSprite;
 
 #if !linux
 import hxwindowmode.WindowColorMode;
