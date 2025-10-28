@@ -34,7 +34,7 @@ funk.addLocalCallback("setCameraShader", function(shaderName:String, camera:Stri
 		return false;
 	}
 	
-	var shader:FlxBasic = PlayState.instance.getLuaObject(obj); // this assumes you are making a lua sprite shader to put on the cameras
+	var shader:FlxBasic = PlayState.instance.getLuaObject(shaderName); // this assumes you are making a lua sprite shader to put on the cameras
 	if(shader != null)
 	{
 		LuaUtils.cameraFromString(camera).setFilters([new ShaderFilter(shader)]);
