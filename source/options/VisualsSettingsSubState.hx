@@ -293,42 +293,13 @@ class VisualsSettingsSubState extends BaseOptionsMenu
 	function onWindowColorChange()
 	{
 		#if (!linux && !mac)
-		// Peak coding, very cool
-		if(ClientPrefs.data.windowColorMode == 'Light')
-		{
-			WindowColorMode.setLightMode();
-		}
-		else if(ClientPrefs.data.windowColorMode == 'Dark')
+		if(ClientPrefs.data.darkWindowColor)
 		{
 			WindowColorMode.setDarkMode();
 		}
-		else if(ClientPrefs.data.windowColorMode == 'Red')
+		if(!ClientPrefs.data.darkWindowColor)
 		{
-			WindowColorMode.setWindowBorderColor([255, 0, 0], true, false);
-		}
-		else if(ClientPrefs.data.windowColorMode == 'Orange')
-		{
-			WindowColorMode.setWindowBorderColor([255, 127, 0], true, false);
-		}
-		else if(ClientPrefs.data.windowColorMode == 'Yellow')
-		{
-			WindowColorMode.setWindowBorderColor([255, 255, 0], true, false);
-		}
-		else if(ClientPrefs.data.windowColorMode == 'Green')
-		{
-			WindowColorMode.setWindowBorderColor([0, 255, 0], true, false);
-		}
-		else if(ClientPrefs.data.windowColorMode == 'Blue')
-		{
-			WindowColorMode.setWindowBorderColor([0, 0, 255], true, false);
-		}
-		else if(ClientPrefs.data.windowColorMode == 'Indigo')
-		{
-			WindowColorMode.setWindowBorderColor([75, 0, 130], true, false);
-		}
-		else if(ClientPrefs.data.windowColorMode == 'Violet')
-		{
-			WindowColorMode.setWindowBorderColor([148, 0, 211], true, false);
+			WindowColorMode.setLightMode();
 		}
 		WindowColorMode.redrawWindowHeader();
 		#end
