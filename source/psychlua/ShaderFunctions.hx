@@ -13,27 +13,27 @@ class ShaderFunctions
 		// shader shit
 		funk.addLocalCallback("setCameraFilter", function(cam:String, shader:String) {
 		if(!ClientPrefs.data.shaders) return false;
-			
+
 			var camera:FlxCamera = null;
 
-    switch(cam.toLowerCase())
+    switch (cam.toLowerCase())
     {
-        case 'camgame' | 'game': camera = FlxG.cameras.list[FlxG.cameras.indexOf(FlxG.cameras.getByName('camGame'))];
-        case 'camhud' | 'hud': camera = FlxG.cameras.list[FlxG.cameras.indexOf(FlxG.cameras.getByName('camHUD'))];
-        case 'camother' | 'other': camera = FlxG.cameras.list[FlxG.cameras.indexOf(FlxG.cameras.getByName('camOther'))];
+        case 'camgame':  camera = PlayState.instance.camGame;
+        case 'camhud':   camera = PlayState.instance.camHUD;
+        case 'camother': camera = PlayState.instance.camOther;
         default:
-            var possible = Reflect.getProperty(PlayState.instance, cam);
-            if (possible != null && Std.isOfType(possible, FlxCamera))
-                camera = cast possible;
+            var maybeCam = Reflect.getProperty(PlayState.instance, cam);
+            if (maybeCam != null && Std.isOfType(maybeCam, FlxCamera))
+                camera = cast maybeCam;
     }
-	var shaderPath = Paths.frag(shader);
-	if (shader == null)
-	{
-		FunkinLua.luaTrace("setCameraFilter: Object $shader is missing!", false, false, FlxColor.RED);
-		return false;
-	}	
-    // Load the shader from cache or create it
-     var shaderObj = new FlxRuntimeShader(shaderPath);
+    if (shader == '')
+    {
+        camera.setFilters([]);
+        return;
+    }
+
+    // Load and apply the shader directly by name
+   var shaderObj:FlxRuntimeShader = getShader(obj);
     camera.setFilters([new ShaderFilter(shaderObj)]);
 		});
 		
