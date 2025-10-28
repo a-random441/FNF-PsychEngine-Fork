@@ -71,7 +71,9 @@ class Main extends Sprite
 	{
 		super();
 
+		#if (!linux && !mac)
 		WindowColorMode.redrawWindowHeader(); // to make sure window color change happens every time you open the game
+		#end
 
 		#if (cpp && windows)
 		backend.Native.fixScaling();
