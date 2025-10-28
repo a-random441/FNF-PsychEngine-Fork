@@ -155,10 +155,10 @@ class VisualsSettingsSubState extends BaseOptionsMenu
 		#end
 
 		#if (!linux && !mac)
-		var option:Option = new Option('Window Color',
-			"What color do you want for the Window?",
-			'windowColorMode',
-			BOOL,
+		var option:Option = new Option('Toggle Dark Window',
+			"Do you want the window header to be dark?",
+			'darkWindowColor',
+			BOOL),
 		addOption(option);
 		option.onChange = onWindowColorChange;
 		#end
