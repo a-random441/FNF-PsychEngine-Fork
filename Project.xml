@@ -125,7 +125,7 @@
 	<haxelib name="flxanimate"/>
 
 	<!--Custom Libraries-->
-	<haxelib name="hxWindowColorMode" unless="linux"/>
+	<haxelib name="hxWindowColorMode" unless="linux || mac"/>
 
 	<!-- Disable Discord IO Thread -->
 	<haxedef name="DISCORD_DISABLE_IO_THREAD" if="hxdiscord_rpc" />
