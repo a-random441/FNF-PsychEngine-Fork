@@ -63,7 +63,9 @@ import flixel.group.FlxSpriteGroup;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.addons.transition.FlxTransitionableState;
 
+#if !linux
 import hxwindowmode.WindowColorMode;
+#end
 
 using StringTools;
 #end
