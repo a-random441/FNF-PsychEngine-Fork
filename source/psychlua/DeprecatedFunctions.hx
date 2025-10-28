@@ -140,6 +140,24 @@ class DeprecatedFunctions
 			FunkinLua.luaTrace("setPropertyLuaSprite: Lua sprite with tag: " + tag + " doesn't exist!");
 			return false;
 		});
+		Lua_helper.add_callback(lua, "addInstance", function(objectName:String, ?inFront:Bool = false) {
+			FunkinLua.luaTrace("addInstance is deprecated! Use addLuaSprite instead", false, true);
+			var savedObj:Dynamic = MusicBeatState.getVariables().get(objectName);
+			if(savedObj != null)
+			{
+				var obj:Dynamic = savedObj;
+				if (inFront)
+					LuaUtils.getTargetInstance().add(obj);
+				else
+				{
+					if(!PlayState.instance.isDead)
+						PlayState.instance.insert(PlayState.instance.members.indexOf(LuaUtils.getLowestCharacterGroup()), obj);
+					else
+						GameOverSubstate.instance.insert(GameOverSubstate.instance.members.indexOf(GameOverSubstate.instance.boyfriend), obj);
+				}
+			}
+			else FunkinLua.luaTrace('addInstance: Can\'t add what doesn\'t exist~ ($objectName)', false, false, FlxColor.RED);
+		});
 		Lua_helper.add_callback(lua, "musicFadeIn", function(duration:Float, fromValue:Float = 0, toValue:Float = 1) {
 			FlxG.sound.music.fadeIn(duration, fromValue, toValue);
 			FunkinLua.luaTrace('musicFadeIn is deprecated! Use soundFadeIn instead.', false, true);
