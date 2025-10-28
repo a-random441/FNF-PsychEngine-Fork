@@ -159,8 +159,8 @@ class VisualsSettingsSubState extends BaseOptionsMenu
 			"What color do you want for the Window?",
 			'windowColorMode',
 			BOOL,
-		option.onChange = onWindowColorChange;
 		addOption(option);
+		option.onChange = onWindowColorChange;
 		#end
 
 		var option:Option = new Option('Combo Stacking',
