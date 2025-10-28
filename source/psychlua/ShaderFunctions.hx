@@ -11,32 +11,46 @@ class ShaderFunctions
 	{
 		var lua = funk.lua;
 		// shader shit
-		funk.addLocalCallback("setCameraFilter", function(cam:String, shader:String) {
-		if(!ClientPrefs.data.shaders) return false;
+		funk.addLocalCallback("setCameraShader", function(tag:String, cam:String, shader:String) {
+    if (!ClientPrefs.data.shaders) return false;
+    #if (!flash && MODS_ALLOWED && sys)
+    // Initialize shader if not exists
+    if (!funk.runtimeShaders.exists(shader) && !funk.initLuaShader(shader)) {
+        FunkinLua.luaTrace('setCameraShader: Shader ' + shader + ' is missing!', false, false, FlxColor.RED);
+        return false;
+    }
 
-			var camera:FlxCamera = null;
-
-    switch (cam.toLowerCase())
-    {
+    var camera:FlxCamera = null;
+    switch (cam.toLowerCase()) {
         case 'camgame':  camera = PlayState.instance.camGame;
         case 'camhud':   camera = PlayState.instance.camHUD;
         case 'camother': camera = PlayState.instance.camOther;
         default:
-            var maybeCam = Reflect.getProperty(PlayState.instance, cam);
-            if (maybeCam != null && Std.isOfType(maybeCam, FlxCamera))
-                camera = cast maybeCam;
-    }
-    if (shader == '')
-    {
-        camera.setFilters([]);
-        return;
+            // optionally try reflect / dynamic property
     }
 
-    // Load and apply the shader directly by name
-   var shaderObj:FlxRuntimeShader = getShader(obj);
-    camera.setFilters([new ShaderFilter(shaderObj)]);
-		});
-		
+    if (camera == null) {
+        FunkinLua.luaTrace('setCameraShader: Camera not found: ' + cam, false, false, FlxColor.RED);
+        return false;
+    }
+
+    // apply shader
+    var arr:Array<Dynamic> = funk.runtimeShaders.get(shader);
+    // arr[0] / arr[1] are used in sprite code: the compiled shader and uniform data
+    var runtime:FlxRuntimeShader = arr[0];
+    var shaderData = arr[1];
+    camera.setFilters([ new ShaderFilter(runtime) ]);
+
+    // store mapping tag → (camera, shader name)
+    // you could keep a Map inside FunkinLua or static Map in ShaderFunctions
+    getCameraShaderMap().set(tag, { camera: camera, runtime: runtime });
+
+    return true;
+    #else
+    FunkinLua.luaTrace("setCameraShader: Platform unsupported for Runtime Shaders!", false, false, FlxColor.RED);
+    return false;
+    #end
+});	
 		funk.addLocalCallback("initLuaShader", function(name:String) {
 			if(!ClientPrefs.data.shaders) return false;
 
