@@ -157,7 +157,7 @@ class VisualsSettingsSubState extends BaseOptionsMenu
 		var option:Option = new Option('Window Color',
 			"What color do you want for the Window?",
 			'windowColorMode',
-			STRING);
+			STRING,
 		['Light', 'Dark', 'Red', 'Orange', 'Yellow', 'Green', 'Blue', 'Indigo', 'Violet']); // Follows Rainbow colors
 		option.onChange = onWindowColorChange;
 		addOption(option);
