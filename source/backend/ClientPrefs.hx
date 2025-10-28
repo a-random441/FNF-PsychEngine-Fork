@@ -13,7 +13,7 @@ import states.TitleState;
 	public var opponentStrums:Bool = true;
 	public var showFPS:Bool = true;
 	public var flashing:Bool = true;
-	#if (!linux && !mac) public var windowColorMode:String = 'Light'; #end
+	#if (!linux && !mac) public var darkWindowColor:Bool = false; #end
 	public var autoPause:Bool = true;
 	public var antialiasing:Bool = true;
 	public var noteSkin:String = 'Default';
