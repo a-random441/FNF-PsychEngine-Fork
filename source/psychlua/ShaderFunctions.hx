@@ -32,7 +32,7 @@ funk.addLocalCallback("setCameraShader", function(shaderName:String, camera:Stri
 		return false;
 	}
 	
-	var shader:FlxRuntimeShader = funk.runtimeShaders.get(shaderName);
+	var shader:FlxRuntimeShader = getShader(shaderName);
 	if(shader != null)
 	{
 		shader.cameras = [LuaUtils.cameraFromString(camera)];
