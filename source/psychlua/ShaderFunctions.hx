@@ -26,7 +26,7 @@ class ShaderFunctions
             if (possible != null && Std.isOfType(possible, FlxCamera))
                 camera = cast possible;
     }
-	var shaderPath = Paths.shader(shader);
+	var shaderPath = Paths.frag(shader);
 	if (shader == null)
 	{
 		FunkinLua.luaTrace("setCameraFilter: Object $shader is missing!", false, false, FlxColor.RED);
