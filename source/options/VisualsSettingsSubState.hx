@@ -154,6 +154,7 @@ class VisualsSettingsSubState extends BaseOptionsMenu
 		addOption(option);
 		#end
 
+		#if !linux
 		var option:Option = new Option('Window Color',
 			"What color do you want for the Window?",
 			'windowColorMode',
@@ -161,6 +162,7 @@ class VisualsSettingsSubState extends BaseOptionsMenu
 		['Light', 'Dark', 'Red', 'Orange', 'Yellow', 'Green', 'Blue', 'Indigo', 'Violet']); // Follows Rainbow colors
 		option.onChange = onWindowColorChange;
 		addOption(option);
+		#end
 
 		var option:Option = new Option('Combo Stacking',
 			"If unchecked, Ratings and Combo won't stack, saving on System Memory and making them easier to read",
@@ -290,6 +292,7 @@ class VisualsSettingsSubState extends BaseOptionsMenu
 
 	function onWindowColorChange()
 	{
+		#if !linux
 		// Peak coding, very cool
 		if(ClientPrefs.data.windowColorMode == 'Light')
 		{
@@ -328,6 +331,7 @@ class VisualsSettingsSubState extends BaseOptionsMenu
 			WindowColorMode.setWindowBorderColor([148, 0, 211], true, false);
 		}
 		WindowColorMode.redrawWindowHeader();
+		#end
 	}
 
 	override function destroy()
