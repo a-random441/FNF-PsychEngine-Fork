@@ -64,7 +64,7 @@ import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.addons.transition.FlxTransitionableState;
 import flixel.addons.effects.FlxSkewedSprite;
 
-#if !linux
+#if (!linux && !mac)
 import hxwindowmode.WindowColorMode;
 #end
 
