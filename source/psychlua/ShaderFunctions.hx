@@ -5,6 +5,8 @@ import flixel.addons.display.FlxRuntimeShader;
 import openfl.filters.ShaderFilter;
 #end
 
+import flixel.FlxBasic;
+
 class ShaderFunctions
 {
 	public static function implement(funk:FunkinLua)
