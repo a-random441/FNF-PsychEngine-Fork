@@ -154,7 +154,7 @@ class VisualsSettingsSubState extends BaseOptionsMenu
 		addOption(option);
 		#end
 
-		#if !linux
+		#if (!linux && !mac)
 		var option:Option = new Option('Window Color',
 			"What color do you want for the Window?",
 			'windowColorMode',
@@ -292,7 +292,7 @@ class VisualsSettingsSubState extends BaseOptionsMenu
 
 	function onWindowColorChange()
 	{
-		#if !linux
+		#if (!linux && !mac)
 		// Peak coding, very cool
 		if(ClientPrefs.data.windowColorMode == 'Light')
 		{
