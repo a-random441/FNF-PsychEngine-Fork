@@ -1136,15 +1136,7 @@ class PlayState extends MusicBeatState
 		if (ret == LuaUtils.Function_Stop)
 			return;
 
-		updateScoreText();
-		if (!miss && !cpuControlled && scoreBop)
-			doScoreBop();
-
-		callOnScripts('onUpdateScore', [miss]);
-	}
-
-	public dynamic function updateScoreText()
-	{
+		//updateScoreText();
 		var str:String = Language.getPhrase('rating_$ratingName', ratingName);
 		if(totalPlayed != 0)
 		{
@@ -1156,6 +1148,16 @@ class PlayState extends MusicBeatState
 		if(!instakillOnMiss) tempScore = Language.getPhrase('score_text', 'Score: {1} | Misses: {2} | Rating: {3}', [songScore, songMisses, str]);
 		else tempScore = Language.getPhrase('score_text_instakill', 'Score: {1} | Rating: {2}', [songScore, str]);
 		scoreTxt.text = tempScore;
+		
+		if (!miss && !cpuControlled && scoreBop)
+			doScoreBop();
+
+		callOnScripts('onUpdateScore', [miss]);
+	}
+
+	public dynamic function updateScoreText()
+	{
+		
 	}
 
 	public dynamic function fullComboFunction()
