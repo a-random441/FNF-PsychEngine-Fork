@@ -376,13 +376,13 @@ class HScript extends Iris
 			{
 				initHaxeModuleCode(funk, codeToRun, varsToBring);
 			try {
-				retVal = funk.hscript.execute(funcToRun, funcArgs);
+				retVal = funk.hscript.call(funcToRun, funcArgs);
 			}
 			catch (e:Dynamic) {
-				luaTrace(scriptName + ":" + lastCalledFunction + " - " + e, false, false, FlxColor.RED);
+				FunkinLua.luaTrace(scriptName + ":" + lastCalledFunction + " - " + e, false, false, FlxColor.RED);
 			}
 			if(retVal != null && !isOfTypes(retVal, [Bool, Int, Float, String, Array])) retVal = null;
-			if(retVal == null) Lua.pushnil(lua);
+			if(retVal == null) Lua.pushnil(FunkinLua.lua);
 			return retVal;
 			}
 		});
