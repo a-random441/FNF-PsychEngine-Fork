@@ -377,13 +377,14 @@ class HScript extends Iris
 				initHaxeModuleCode(funk, codeToRun, varsToBring);
 			try {
 				retVal = funk.hscript.call(funcToRun, funcArgs);
+				return retVal;
 			}
 			catch (e:Dynamic) {
-				funk.luaTrace(funk.scriptName + ":" + funk.lastCalledFunction + " - " + e, false, false, FlxColor.RED);
+				FunkinLua.luaTrace(funk.scriptName + ":" + funk.lastCalledFunction + " - " + e, false, false, FlxColor.RED);
 			}
 			if(retVal != null && !Std.isOfTypes(retVal, [Bool, Int, Float, String, Array])) retVal = null;
 			if(retVal == null) Lua.pushnil(funk.lua);
-			return retVal;
+							return retVal;
 			}
 		});
 		
