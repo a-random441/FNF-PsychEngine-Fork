@@ -1713,6 +1713,11 @@ class PlayState extends MusicBeatState
 				openCharacterEditor();
 		}
 
+		if(combo >= 10)
+		{
+			showCombo = true;
+		}
+
 		if (healthBar.bounds.max != null && health > healthBar.bounds.max)
 			health = healthBar.bounds.max;
 
