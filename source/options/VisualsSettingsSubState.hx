@@ -110,6 +110,12 @@ class VisualsSettingsSubState extends BaseOptionsMenu
 			BOOL);
 		addOption(option);
 
+		var option:Option = new Option('Show Combo Sprite',
+			"If checked, if your combo is above 10, combo sprite will show.",
+			'scoreZoom',
+			BOOL);
+		addOption(option);
+
 		var option:Option = new Option('Health Bar Opacity',
 			'How much transparent should the health bar and icons be.',
 			'healthBarAlpha',

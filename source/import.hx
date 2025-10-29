@@ -68,5 +68,11 @@ import flixel.addons.effects.FlxSkewedSprite;
 import hxwindowmode.WindowColorMode;
 #end
 
+#if MODCHARTING_FEATURES
+import modchart.backend.standalone.adapters.psych.Psych;
+import modchart.Manager;
+import modchart.engine.modifiers.Modifier;
+#end
+
 using StringTools;
 #end

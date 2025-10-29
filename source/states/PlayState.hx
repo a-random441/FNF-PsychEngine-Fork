@@ -91,6 +91,17 @@ class PlayState extends MusicBeatState
 
 	//event variables
 	private var isCameraOnForcedPos:Bool = false;
+	// Enable/disable camera bop
+public var cameraBopEnabled:Bool = false;
+
+// Frequency in beats between each camera pulse
+public var cameraBopFrequency:Float = 1;
+
+// Intensity multiplier for the camera pulse
+public var cameraBopIntensity:Float = 1;
+
+// Timer to track elapsed beats for pulsing
+private var cameraBopTimer:Float = 0;
 
 	public var boyfriendMap:Map<String, Character> = new Map<String, Character>();
 	public var dadMap:Map<String, Character> = new Map<String, Character>();
@@ -1136,7 +1147,15 @@ class PlayState extends MusicBeatState
 		if (ret == LuaUtils.Function_Stop)
 			return;
 
-		//updateScoreText();
+		updateScoreText();
+		if (!miss && !cpuControlled && scoreBop)
+			doScoreBop();
+
+		callOnScripts('onUpdateScore', [miss]);
+	}
+
+	public dynamic function updateScoreText()
+	{
 		var str:String = Language.getPhrase('rating_$ratingName', ratingName);
 		if(totalPlayed != 0)
 		{
@@ -1148,16 +1167,6 @@ class PlayState extends MusicBeatState
 		if(!instakillOnMiss) tempScore = Language.getPhrase('score_text', 'Score: {1} | Misses: {2} | Rating: {3}', [songScore, songMisses, str]);
 		else tempScore = Language.getPhrase('score_text_instakill', 'Score: {1} | Rating: {2}', [songScore, str]);
 		scoreTxt.text = tempScore;
-		
-		if (!miss && !cpuControlled && scoreBop)
-			doScoreBop();
-
-		callOnScripts('onUpdateScore', [miss]);
-	}
-
-	public dynamic function updateScoreText()
-	{
-		
 	}
 
 	public dynamic function fullComboFunction()
@@ -1715,9 +1724,16 @@ class PlayState extends MusicBeatState
 				openCharacterEditor();
 		}
 
-		if(combo >= 10)
+		if(ClientPrefs.data.showComboSprite)
 		{
-			showCombo = true;
+			if(combo >= 10)
+			{
+				showCombo = true;
+			}
+			else
+			{
+				showCombo = false;
+			}
 		}
 
 		if (healthBar.bounds.max != null && health > healthBar.bounds.max)
@@ -1760,10 +1776,23 @@ class PlayState extends MusicBeatState
 				timeTxt.text = FlxStringUtil.formatTime(secondsTotal, false);
 		}
 
-		if (camZooming)
+		if (camZooming || cameraBopEnabled)
 		{
 			FlxG.camera.zoom = FlxMath.lerp(defaultCamZoom, FlxG.camera.zoom, Math.exp(-elapsed * 3.125 * camZoomingDecay * playbackRate));
 			camHUD.zoom = FlxMath.lerp(1, camHUD.zoom, Math.exp(-elapsed * 3.125 * camZoomingDecay * playbackRate));
+			// Advance timer in beats
+    cameraBopTimer += (elapsed / (60 / SONG.bpm)); // elapsed in seconds → beats
+
+    if (cameraBopTimer >= cameraBopFrequency)
+    {
+        // Trigger the pulse
+        var pulseAmount:Float = 0.015 * cameraBopIntensity;
+
+        FlxG.camera.zoom += pulseAmount;
+        camHUD.zoom += pulseAmount * 2; // optional: stronger HUD pulse
+
+        cameraBopTimer -= cameraBopFrequency; // reset timer
+    }
 		}
 
 		FlxG.watch.addQuick("secShit", curSection);
@@ -2257,6 +2286,22 @@ class PlayState extends MusicBeatState
 						}
 				}
 				reloadHealthBarColors();
+
+			case 'Set Camera Bop':
+				// Parse frequency
+    var freq:Float = Std.parseFloat(value1);
+    if (Math.isNaN(freq) || freq <= 0) freq = 1;  // default 1 beat
+
+    // Parse intensity
+    var intensity:Float = Std.parseFloat(value2);
+    if (Math.isNaN(intensity) || intensity <= 0) intensity = 1;
+
+    cameraBopEnabled = true;
+    cameraBopFrequency = freq;
+    cameraBopIntensity = intensity;
+    cameraBopTimer = 0; // reset timer so it syncs immediately
+
+    trace("Camera Bop set | Frequency: " + freq + " beats | Intensity: " + intensity);
 
 			case 'Change Scroll Speed':
 				if (songSpeedType != "constant")

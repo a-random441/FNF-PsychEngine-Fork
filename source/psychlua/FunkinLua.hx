@@ -557,6 +557,9 @@ class FunkinLua {
 		Lua_helper.add_callback(lua, "doTweenY", function(tag:String, vars:String, value:Dynamic, duration:Float, ?ease:String = 'linear') {
 			return oldTweenFunction(tag, vars, {y: value}, duration, ease, 'doTweenY');
 		});
+		Lua_helper.add_callback(lua, "doTweenScale", function(tag:String, vars:String, value:Dynamic, duration:Float, ?ease:String = 'linear') {
+			return oldTweenFunction(tag, vars + '.scale', {x: value, y: value}, duration, ease, 'doTweenScale');
+		});
 		Lua_helper.add_callback(lua, "doTweenAngle", function(tag:String, vars:String, value:Dynamic, duration:Float, ?ease:String = 'linear') {
 			return oldTweenFunction(tag, vars, {angle: value}, duration, ease, 'doTweenAngle');
 		});

@@ -127,6 +127,18 @@
 	<!--Custom Libraries-->
 	<haxelib name="hxWindowColorMode" unless="linux || mac"/>
 
+	<!--Custom Definitons-->
+	<!-- Comment this out to disable modcharting features -->
+	<define name="MODCHARTING_FEATURES" />
+	
+	<section if="MODCHARTING_FEATURES">
+		<haxedef name="FM_ENGINE" value="PSYCH"/>
+		<haxedef name="FM_ENGINE_VERSION" value="1.0"/>
+
+		<haxelib name="FunkinModchart" />
+		<haxeflag name="--macro" value="modchart.backend.macros.Macro.includeFiles()"/>
+	</section>
+
 	<!-- Disable Discord IO Thread -->
 	<haxedef name="DISCORD_DISABLE_IO_THREAD" if="hxdiscord_rpc" />
 	<haxedef name="NO_PRECOMPILED_HEADERS" if="linux" />

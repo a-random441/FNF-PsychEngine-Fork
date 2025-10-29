@@ -180,6 +180,10 @@ class HScript extends Iris
 		#if flxanimate
 		set('FlxAnimate', FlxAnimate);
 		#end
+		#if MODCHARTING_FEATURES
+		set('Manager', modchart.Manager);
+		set('Modifier', modchart.engine.modifiers.Modifier);
+		#end
 
 		// Functions & Variables
 		set('setVar', function(name:String, value:Dynamic) {
@@ -524,6 +528,16 @@ class CustomFlxColor {
 
 	public static function fromString(str:String):Int
 		return cast FlxColor.fromString(str);
+
+	public static inline function interpolate(Color1:FlxColor, Color2:FlxColor, Factor:Float = 0.5):FlxColor
+	{
+		var r:Int = Std.int((Color2.red - Color1.red) * Factor + Color1.red);
+		var g:Int = Std.int((Color2.green - Color1.green) * Factor + Color1.green);
+		var b:Int = Std.int((Color2.blue - Color1.blue) * Factor + Color1.blue);
+		var a:Int = Std.int((Color2.alpha - Color1.alpha) * Factor + Color1.alpha);
+
+		return fromRGB(r, g, b, a);
+	}
 }
 
 class CustomInterp extends crowplexus.hscript.Interp

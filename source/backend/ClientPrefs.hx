@@ -39,6 +39,7 @@ import states.TitleState;
 
 	public var ghostTapping:Bool = true;
 	public var timeBarType:String = 'Time Left';
+	public var showComboSprite:Bool = false;
 	public var scoreZoom:Bool = true;
 	public var noReset:Bool = false;
 	public var healthBarAlpha:Float = 1;
@@ -78,6 +79,10 @@ import states.TitleState;
 	public var discordRPC:Bool = true;
 	public var loadingScreen:Bool = true;
 	public var language:String = 'en-US';
+	#if MODCHARTING_FEATURES
+	public var modchartsEnabled:Bool = true;
+	public var modchartingHoldSubdivisions:Int = 4;
+	#end
 }
 
 class ClientPrefs {
