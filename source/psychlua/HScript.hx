@@ -353,40 +353,22 @@ class HScript extends Iris
 	#if LUA_ALLOWED
 	public static function implement(funk:FunkinLua) {
 		// This uses the old runHaxeCode, which was much better. modifired to be compatible with 1.0.4.
-		funk.addLocalCallback("runHaxeCode", function(codeToRun:String, ?varsToBring:Any = null, ?funcToRun:String = null, ?funcArgs:Array<Dynamic> = null):Dynamic {
-			/*initHaxeModuleCode(funk, codeToRun, varsToBring);
-			if (funk.hscript != null)
-			{
-				final retVal:IrisCall = funk.hscript.call(funcToRun, funcArgs);
-				if (retVal != null)
-				{
-					return (LuaUtils.isLuaSupported(retVal.returnValue)) ? retVal.returnValue : null;
-				}
-				else if (funk.hscript.returnValue != null)
-				{
-					return funk.hscript.returnValue;
-				}
-			}
-			return null;
-            */
+		funk.addLocalCallback("runHaxeCode", function(codeToRun:String, ?varsToBring:Dynamic = null, ?funcToRun:String = null, ?funcArgs:Array<Dynamic> = null):Dynamic {
+            var retVal:Dynamic = null;
 
-			var retVal:Dynamic = null;
-
-			if (funk.hscript != null)
-			{
-				initHaxeModuleCode(funk, codeToRun, varsToBring);
-			try {
-				retVal = funk.hscript.call(funcToRun, funcArgs);
-				return retVal;
-			}
-			catch (e:Dynamic) {
-				FunkinLua.luaTrace(funk.scriptName + ":" + funk.lastCalledFunction + " - " + e, false, false, FlxColor.RED);
-			}
-			if(retVal != null && !Std.isOfType(retVal, [Bool, Int, Float, String, Array])) retVal = null;
-			if(retVal == null) Lua.pushnil(funk.lua);
-							return retVal;
-			}
-		});
+            if (funk.hscript != null) {
+                initHaxeModuleCode(funk, codeToRun, varsToBring);
+                try {
+                    retVal = funk.hscript.call(funcToRun, funcArgs);
+                } catch (e:Dynamic) {
+                    FunkinLua.luaTrace(funk.scriptName + ":" + funk.lastCalledFunction + " - " + e, false, false, FlxColor.RED);
+                }
+                if (retVal != null && !Std.isOfType(retVal, [Bool, Int, Float, String, Array])) retVal = null;
+                if (retVal == null) Lua.pushnil(funk.lua);
+                return retVal;
+            }
+            return null;
+        });
 		
 		funk.addLocalCallback("runHaxeFunction", function(funcToRun:String, ?funcArgs:Array<Dynamic> = null) {
 			if (funk.hscript != null)
