@@ -8,6 +8,9 @@ import psychlua.FunkinLua
 
 #if LUA_ALLOWED
 import psychlua.FunkinLua;
+#end
+
+#if LUA_ALLOWED
 import llua.Lua;
 import llua.LuaL;
 import llua.State;
