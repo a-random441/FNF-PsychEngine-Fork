@@ -14,9 +14,8 @@ class ShaderFunctions
 		var lua = funk.lua;
 		// shader shit
 		
-		funk.addLocalCallback("initLuaShader", function(name:String, glslVersion:String = null) {
+		funk.addLocalCallback("initLuaShader", function(name:String) {
 			if(!ClientPrefs.data.shaders) return false;
-			if (glslVersion == null) glslVersion = Flags.DEFAULT_GLSL_VERSION;
 
 			#if (!flash && MODS_ALLOWED && sys)
 			return funk.initLuaShader(name);
