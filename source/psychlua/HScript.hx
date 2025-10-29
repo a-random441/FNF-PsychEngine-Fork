@@ -382,7 +382,7 @@ class HScript extends Iris
 			catch (e:Dynamic) {
 				FunkinLua.luaTrace(funk.scriptName + ":" + funk.lastCalledFunction + " - " + e, false, false, FlxColor.RED);
 			}
-			if(retVal != null && !Std.isOfTypes(retVal, [Bool, Int, Float, String, Array])) retVal = null;
+			if(retVal != null && !Std.isOfType(retVal, [Bool, Int, Float, String, Array])) retVal = null;
 			if(retVal == null) Lua.pushnil(funk.lua);
 							return retVal;
 			}
