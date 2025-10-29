@@ -379,10 +379,10 @@ class HScript extends Iris
 				retVal = funk.hscript.call(funcToRun, funcArgs);
 			}
 			catch (e:Dynamic) {
-				FunkinLua.luaTrace(scriptName + ":" + lastCalledFunction + " - " + e, false, false, FlxColor.RED);
+				funk.luaTrace(funk.scriptName + ":" + funk.lastCalledFunction + " - " + e, false, false, FlxColor.RED);
 			}
-			if(retVal != null && !isOfTypes(retVal, [Bool, Int, Float, String, Array])) retVal = null;
-			if(retVal == null) Lua.pushnil(FunkinLua.lua);
+			if(retVal != null && !Std.isOfTypes(retVal, [Bool, Int, Float, String, Array])) retVal = null;
+			if(retVal == null) Lua.pushnil(funk.lua);
 			return retVal;
 			}
 		});
