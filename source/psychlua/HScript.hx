@@ -10,13 +10,6 @@ import psychlua.FunkinLua
 import psychlua.FunkinLua;
 #end
 
-#if LUA_ALLOWED
-import llua.Lua;
-import llua.LuaL;
-import llua.State;
-import llua.Convert;
-#end
-
 #if HSCRIPT_ALLOWED
 import crowplexus.iris.Iris;
 import crowplexus.iris.IrisConfig;
