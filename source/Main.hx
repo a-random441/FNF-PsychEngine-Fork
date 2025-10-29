@@ -72,7 +72,12 @@ class Main extends Sprite
 		super();
 
 		#if (!linux && !mac)
-		WindowColorMode.redrawWindowHeader(); // to make sure window color change happens every time you open the game
+		if(ClientPrefs.data.darkWindowColor)
+			WindowColorMode.setDarkMode();
+		if(!ClientPrefs.data.darkWindowColor)
+			WindowColorMode.setLightMode();
+
+		WindowColorMode.redrawWindowHeader();
 		#end
 
 		#if (cpp && windows)
