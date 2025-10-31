@@ -154,14 +154,6 @@ class Main extends Sprite
 		Controls.instance = new Controls();
 		ClientPrefs.loadDefaultKeys();
 		#if ACHIEVEMENTS_ALLOWED Achievements.load(); #end
-		#if (!linux && !mac)
-		if(ClientPrefs.data.darkWindowColor)
-			WindowColorMode.setDarkMode();
-		if(!ClientPrefs.data.darkWindowColor)
-			WindowColorMode.setLightMode();
-
-		WindowColorMode.redrawWindowHeader();
-		#end
 		addChild(new FlxGame(game.width, game.height, game.initialState, game.framerate, game.framerate, game.skipSplash, game.startFullscreen));
 
 		#if !mobile

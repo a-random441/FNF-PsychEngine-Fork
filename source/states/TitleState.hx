@@ -74,6 +74,14 @@ class TitleState extends MusicBeatState
 		{
 			ClientPrefs.loadPrefs();
 			Language.reloadPhrases();
+			#if (!linux && !mac)
+		if(ClientPrefs.data.darkWindowColor)
+			WindowColorMode.setDarkMode();
+		if(!ClientPrefs.data.darkWindowColor)
+			WindowColorMode.setLightMode();
+
+		WindowColorMode.redrawWindowHeader();
+		#end
 		}
 
 		curWacky = FlxG.random.getObject(getIntroTextShit());

@@ -91,17 +91,11 @@ class PlayState extends MusicBeatState
 
 	//event variables
 	private var isCameraOnForcedPos:Bool = false;
-	// Enable/disable camera bop
-public var cameraBopEnabled:Bool = false;
+	private var cameraBopTimer:Float = 0;
+	public var cameraBopEnabled:Bool = false;
+	public var cameraBopFrequency:Float = 1;
+	public var cameraBopIntensity:Float = 1;
 
-// Frequency in beats between each camera pulse
-public var cameraBopFrequency:Float = 1;
-
-// Intensity multiplier for the camera pulse
-public var cameraBopIntensity:Float = 1;
-
-// Timer to track elapsed beats for pulsing
-private var cameraBopTimer:Float = 0;
 
 	public var boyfriendMap:Map<String, Character> = new Map<String, Character>();
 	public var dadMap:Map<String, Character> = new Map<String, Character>();
@@ -1777,23 +1771,27 @@ private var cameraBopTimer:Float = 0;
 		}
 
 		if (camZooming || cameraBopEnabled)
-		{
-			FlxG.camera.zoom = FlxMath.lerp(defaultCamZoom, FlxG.camera.zoom, Math.exp(-elapsed * 3.125 * camZoomingDecay * playbackRate));
-			camHUD.zoom = FlxMath.lerp(1, camHUD.zoom, Math.exp(-elapsed * 3.125 * camZoomingDecay * playbackRate));
-			// Advance timer in beats
-    cameraBopTimer += (elapsed / (60 / SONG.bpm)); // elapsed in seconds → beats
+{
+    FlxG.camera.zoom = FlxMath.lerp(defaultCamZoom, FlxG.camera.zoom, Math.exp(-elapsed * 3.125 * camZoomingDecay * playbackRate));
+    camHUD.zoom = FlxMath.lerp(1, camHUD.zoom, Math.exp(-elapsed * 3.125 * camZoomingDecay * playbackRate));
+}
+
+// Camera bop logic only if enabled
+if (cameraBopEnabled)
+{
+    // Advance timer in beats
+    cameraBopTimer += (elapsed / (60 / SONG.bpm));
 
     if (cameraBopTimer >= cameraBopFrequency)
     {
-        // Trigger the pulse
         var pulseAmount:Float = 0.015 * cameraBopIntensity;
 
         FlxG.camera.zoom += pulseAmount;
-        camHUD.zoom += pulseAmount * 2; // optional: stronger HUD pulse
+        camHUD.zoom += pulseAmount * 2;
 
-        cameraBopTimer -= cameraBopFrequency; // reset timer
+        cameraBopTimer -= cameraBopFrequency;
     }
-		}
+}
 
 		FlxG.watch.addQuick("secShit", curSection);
 		FlxG.watch.addQuick("beatShit", curBeat);

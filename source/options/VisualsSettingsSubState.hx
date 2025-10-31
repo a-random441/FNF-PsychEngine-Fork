@@ -112,7 +112,7 @@ class VisualsSettingsSubState extends BaseOptionsMenu
 
 		var option:Option = new Option('Show Combo Sprite',
 			"If checked, if your combo is above 10, combo sprite will show.",
-			'scoreZoom',
+			'showComboSprite',
 			BOOL);
 		addOption(option);
 
