@@ -67,6 +67,12 @@ class VisualsSettingsSubState extends BaseOptionsMenu
 			option.onChange = onChangeSplashSkin;
 		}
 
+		var option:Option = new Option('Show Note Hold Splash',
+			'If checked, when holding a sustain note it will show a note hold splash.', // jarvis fix this description
+			'noteHold',
+			BOOL);
+		addOption(option);
+
 		var option:Option = new Option('Note Splash Opacity',
 			'How much transparent should the Note Splashes be.',
 			'splashAlpha',

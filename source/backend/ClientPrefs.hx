@@ -36,7 +36,7 @@ import states.TitleState;
 		[0xFF3DCAFF, 0xFFF4FFFF, 0xFF003060],
 		[0xFF71E300, 0xFFF6FFE6, 0xFF003100],
 		[0xFFFF884E, 0xFFFFFAF5, 0xFF6C0000]];
-
+	public var noteHold:Bool = false;
 	public var ghostTapping:Bool = true;
 	public var timeBarType:String = 'Time Left';
 	public var showComboSprite:Bool = false;
